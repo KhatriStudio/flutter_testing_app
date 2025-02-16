@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="flutter_application_1">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>flutter_application_1</title>
+  <link rel="manifest" href="manifest.json">
+  <script>
+    async function fetchBloggerPosts() {
+        const url = "https://api.allorigins.win/get?url=" + "https://www.blogger.com/feeds/3528177140012358065/posts/default?alt=json&max-results=10&start-index=1";
+        
+        try {
+            const response = await fetch(url);
+            console.log(response)
+            const data = await response.json();
+
+            const postsContainer = document.getElementById("posts");
+            postsContainer.innerHTML = "";  // Clear previous content
+            
+            const posts = data.feed.entry || [];
+            posts.forEach(post => {
+                let title = post.title?.$t || "No Title";
+                let content = post.content?.$t || "No Content";
+
+                let postDiv = document.createElement("div");
+                postDiv.innerHTML = `<h3>${title}</h3><p>${content}</p><hr>`;
+                postsContainer.appendChild(postDiv);
+            });
+
+        } catch (error) {
+            console.error("Failed to load Blogger posts:", error);
+        }
+    }
+
+    window.onload = fetchBloggerPosts;  // Load posts when the page loads
+</script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+  <h1>Latest Blogger Posts</h1>
+    <div id="posts">Loading...</div>
+
+
+</body>
+</html>
